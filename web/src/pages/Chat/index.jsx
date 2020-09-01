@@ -29,7 +29,7 @@ function Chat() {
 
     socket.on("connected", (data) => {
       setHistory(data.history);
-      console.log(data.history);
+
       setProfile({
         ...profile,
         username: data.payload.username,
@@ -39,7 +39,6 @@ function Chat() {
     });
 
     socket.on("chat.new_message", (data) => {
-      console.log("event");
       setMessages((cur_messages) => [...cur_messages, data]);
     });
   }, [socket]);

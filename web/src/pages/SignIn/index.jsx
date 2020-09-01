@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import { api } from "../../services/api";
 import { useProfile } from "../../contexts/profile";
 import Chat from "../Chat";
-
-// import { Container } from './styles';
+import { Container, Form } from "./styles";
 
 function SignIn() {
   const { profile, setProfile } = useProfile();
@@ -40,13 +39,20 @@ function SignIn() {
   if (profile?.access_token) return <Chat />;
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="username" />
-        <input type="password" name="password" />
+    <Container>
+      <Form onSubmit={handleSubmit}>
+        <h1>
+          Bem-vindo ao <span>Chat!</span>
+        </h1>
+        <span>Entre para começar a conversar!</span>
+        <input placeholder="Nome de usuário" type="text" name="username" />
+        <input placeholder="Senha" type="password" name="password" />
+        <p>
+          Não possui uma conta? <a href="#!">Clique aqui</a> para cadastrar-se!
+        </p>
         <button type="submit">Entrar</button>
-      </form>
-    </div>
+      </Form>
+    </Container>
   );
 }
 
