@@ -14,11 +14,13 @@ async function SignIn(req, res) {
 
     const hash = await GetPasswordHash({ username });
 
-    const token = await signIn({ username, hash, password });
+    const token = await signIn({ username, id: exists._id, hash, password });
 
     if (!token) return res.status(401).json({ error: "invalid password" });
 
-    return res.json({ access_token: token });
+    return res.json({
+      access_token: token,
+    });
   } catch (error) {
     console.error("Unexpected error on SignIn controller:", error.message);
     return res.status(400).json({ error: "unexpected error" });

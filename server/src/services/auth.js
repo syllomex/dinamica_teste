@@ -1,15 +1,15 @@
 const jwt = require("jsonwebtoken");
 const { comparePassword } = require("../services/password");
 
-async function signIn({ username, hash, password }) {
+async function signIn({ username, id, hash, password }) {
   try {
-    if (!username || !hash || !password)
+    if (!username || !hash || !password || !id)
       throw new Error("Required value not provided on sign in");
 
     const valid = await comparePassword(hash, password);
     if (!valid) throw new Error("Invalid password");
 
-    const token = jwt.sign({ username }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ username, id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
 
@@ -18,6 +18,18 @@ async function signIn({ username, hash, password }) {
     console.error(error.message);
     return null;
   }
+}
+
+async function validateAuthorization(authorization) {
+  const [bearer, token] = authorization.split(" ");
+
+  if (bearer !== "Bearer") return { error: "malformed token" };
+
+  const payload = await getTokenPayload(token);
+
+  if (!payload) return { error: "invalid token" };
+
+  return payload;
 }
 
 async function getTokenPayload(token) {
@@ -31,5 +43,6 @@ async function getTokenPayload(token) {
 
 module.exports = {
   signIn,
+  validateAuthorization,
   getTokenPayload,
 };

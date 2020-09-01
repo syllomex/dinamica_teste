@@ -1,16 +1,10 @@
-const { getTokenPayload } = require("../services/auth");
+const { validateAuthorization } = require("../services/auth");
 
 module.exports = async (req, res, next) => {
   const authorization = req.headers.authorization;
+  const result = await validateAuthorization(authorization);
 
-  const [bearer, token] = authorization.split(" ");
-
-  if (bearer !== "Bearer")
-    return res.status(401).json({ error: "token malformed" });
-
-  const payload = await getTokenPayload(token);
-
-  if (!payload) return res.status(401).json({ error: "invalid token" });
+  if (result.error) return res.status(401).json({ error: "token malformed" });
 
   next();
 };
