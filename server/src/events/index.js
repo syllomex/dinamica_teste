@@ -16,6 +16,7 @@ module.exports = (io) => {
         _id: entry._id,
         username: entry.user.username,
         content: entry.content,
+        createdAt: entry.createdAt,
       };
     });
 
@@ -26,8 +27,11 @@ module.exports = (io) => {
 
       CreateMessage({ content, user_id });
 
-      socket.broadcast.emit("chat.new_message", { content, username });
-      console.log(messages);
+      socket.broadcast.emit("chat.new_message", {
+        content,
+        username,
+        createdAt: new Date(),
+      });
     });
   });
 };

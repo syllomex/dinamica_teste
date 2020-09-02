@@ -7,7 +7,7 @@ export const GlobalStyles = createGlobalStyle`
     outline: 0;
     color: #555;
 
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
   }
 
   html, body, #root {

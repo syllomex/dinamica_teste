@@ -18,7 +18,9 @@ export const Form = styled.form`
 
   width: 100%;
   @media (max-width: 480px) {
-    width: 70%;
+    width: 100%;
+    padding: 20px 20px;
+    margin-top: 24px;
   }
 
   max-width: 480px;

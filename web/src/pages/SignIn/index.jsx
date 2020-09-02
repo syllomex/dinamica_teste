@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { api } from "../../services/api";
 import { useProfile } from "../../contexts/profile";
-import Chat from "../Chat";
 import { Container, Form } from "./styles";
 
 function SignIn() {
@@ -35,8 +34,6 @@ function SignIn() {
   useEffect(() => {
     console.log(profile);
   }, [profile]);
-
-  if (profile?.access_token) return <Chat />;
 
   return (
     <Container>

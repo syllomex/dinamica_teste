@@ -1,7 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import io from "socket.io-client";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useProfile } from "../../contexts/profile";
+
+import {
+  Container,
+  ChatContainer,
+  ChatFooter,
+  MessagesContainer,
+  FooterSpan,
+} from "./styles";
+import Message from "../../components/Message";
 
 function Chat() {
   const [socket, setSocket] = useState();
@@ -13,6 +22,7 @@ function Chat() {
   const { profile, setProfile } = useProfile();
 
   const contentRef = useRef();
+  const messagesContainerRef = useRef();
 
   useEffect(() => {
     const socket = io("http://localhost:8080", {
@@ -43,6 +53,13 @@ function Chat() {
     });
   }, [socket]);
 
+  useLayoutEffect(() => {
+    setTimeout(() => {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+    }, 100);
+  }, []);
+
   if (!socket)
     return (
       <div style={{ height: "100vh" }}>
@@ -60,41 +77,59 @@ function Chat() {
 
     setMessages((cur_messages) => [
       ...cur_messages,
-      { username: profile.username, content },
+      { username: profile.username, content, createdAt: new Date() },
     ]);
+
+    contentRef.current.value = "";
+
+    setTimeout(() => {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight + 100;
+    }, 100);
+  }
+
+  function logout() {
+    localStorage.removeItem("access_token");
+    setProfile(null);
   }
 
   return (
-    <div>
-      <h1>{profile?.username}</h1>
-      <form onSubmit={handleSubmit}>
-        <textarea name="content" ref={contentRef} />
-        <button type="submit">Enviar</button>
-      </form>
-      <div>
-        {history?.map((entry, index) => (
-          <div key={index}>
-            <b
-              style={{
-                color: entry.username === profile.username ? "red" : "initial",
-              }}
-            >
-              {entry.username}
-            </b>
-            <p>{entry.content}</p>
+    <Container>
+      <ChatContainer>
+        <MessagesContainer ref={messagesContainerRef}>
+          <div>
+            {history?.map((entry, index) => (
+              <Message key={index} data={entry} />
+            ))}
           </div>
-        ))}
-      </div>
-      <hr />
-      <div>
-        {messages?.map((entry, index) => (
-          <div key={index}>
-            <b>{entry.username}</b>
-            <p>{entry.content}</p>
+          <div>
+            {messages?.map((entry, index) => (
+              <Message key={index} data={entry} />
+            ))}
           </div>
-        ))}
-      </div>
-    </div>
+        </MessagesContainer>
+
+        <ChatFooter>
+          <form onSubmit={handleSubmit}>
+            <input
+              autoComplete="off"
+              type="text"
+              name="content"
+              ref={contentRef}
+            />
+            <button type="submit">Enviar</button>
+          </form>
+          <form>
+            <FooterSpan>
+              Conectado como <b>{profile?.username}</b> <br />{" "}
+              <b>
+                <a onClick={logout}>Sair</a>
+              </b>
+            </FooterSpan>
+          </form>
+        </ChatFooter>
+      </ChatContainer>
+    </Container>
   );
 }
 
