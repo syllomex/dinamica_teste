@@ -4,7 +4,9 @@ import moment from "moment";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useProfile } from "../../contexts/profile";
 
-import { Redirect } from "react-router-dom";
+import { v4 as uuid } from "uuid";
+
+import { Redirect, Link } from "react-router-dom";
 
 import {
   Container,
@@ -24,6 +26,10 @@ function ChatAdmin() {
   const [messages, setMessages] = useState([]);
   const [filtered, setFiltered] = useState(null);
   const [reversed, setReversed] = useState([]);
+
+  const [connected, setConnected] = useState(false);
+
+  const [deleting, setDeleting] = useState(null);
 
   const [order, setOrder] = useState("asc");
 
@@ -61,10 +67,16 @@ function ChatAdmin() {
         user_id: data.payload.id,
         admin: data.payload.admin,
       });
+
+      setConnected(true);
     });
 
     socket.on("chat.new_message", (data) => {
       setMessages((cur_messages) => [...cur_messages, data]);
+    });
+
+    socket.on("chat.delete_message", (uuid) => {
+      setDeleting(uuid);
     });
   }, [socket]); // eslint-disable-line
 
@@ -85,6 +97,18 @@ function ChatAdmin() {
     setReversed(reversedMessages);
   }, [messages, filtered]);
 
+  useEffect(() => {
+    if (connected)
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+  }, [connected]);
+
+  useEffect(() => {
+    if (!deleting) return;
+    deleteMessage(deleting);
+    setDeleting(null);
+  }, [deleting]); // eslint-disable-line
+
   if (!socket)
     return (
       <div style={{ height: "100vh" }}>
@@ -95,16 +119,19 @@ function ChatAdmin() {
   function handleSubmit(e) {
     e.preventDefault();
     const content = contentRef.current.value;
+    const id = uuid();
 
     if (!content) return;
 
-    socket.emit("chat.new_message", content);
+    socket.emit("chat.new_message", {
+      uuid: id,
+      content,
+    });
 
     let cur_messages = [...messages];
 
-    console.log("current", cur_messages);
-
     cur_messages.push({
+      uuid: id,
       username: profile.username,
       content,
       createdAt: new Date(),
@@ -113,17 +140,9 @@ function ChatAdmin() {
 
     contentRef.current.value = "";
 
-    setTimeout(() => {
-      if (order === "asc")
-        messagesContainerRef.current.scrollTop =
-          messagesContainerRef.current.scrollHeight + 100;
-    }, 100);
-  }
-
-  function logout() {
-    localStorage.removeItem("access_token");
-    setProfile(null);
-    window.location.href = "/";
+    if (order === "asc")
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight + 100;
   }
 
   if (profile.admin === false) return <Redirect to="/" />;
@@ -166,6 +185,24 @@ function ChatAdmin() {
     setFiltered(filteredMessages);
   }
 
+  function deleteMessage(uuid) {
+    let cur_messages = [...messages];
+
+    let deleting_index;
+    cur_messages.forEach((message, index) => {
+      if (message.uuid === uuid) deleting_index = index;
+    });
+
+    cur_messages.splice(deleting_index, 1);
+
+    setMessages(cur_messages);
+  }
+
+  function handleDelete(uuid) {
+    deleteMessage(uuid);
+    socket.emit("chat.delete_message", uuid);
+  }
+
   return (
     <Container>
       <ChatContainer>
@@ -188,19 +225,19 @@ function ChatAdmin() {
           {order === "desc" ? (
             <div>
               {reversed?.map((entry, index) => (
-                <Message key={index} data={entry} />
+                <Message key={index} data={entry} onDelete={handleDelete} />
               ))}
             </div>
           ) : filtered ? (
             <div>
               {filtered.map((entry, index) => (
-                <Message key={index} data={entry} />
+                <Message key={index} data={entry} onDelete={handleDelete} />
               ))}
             </div>
           ) : (
             <div>
               {messages?.map((entry, index) => (
-                <Message key={index} data={entry} />
+                <Message key={index} data={entry} onDelete={handleDelete} />
               ))}
             </div>
           )}
@@ -222,9 +259,7 @@ function ChatAdmin() {
             <FooterSpan>
               Conectado como <b>{profile?.username} (Administrador)</b> <br />{" "}
               <b>
-                <a href="#!" onClick={logout}>
-                  Sair
-                </a>
+                <Link to="/logout">Sair</Link>
               </b>
             </FooterSpan>
           </form>

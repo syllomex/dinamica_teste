@@ -3,6 +3,10 @@ const Schema = mongo.Schema;
 
 const messageSchema = new Schema(
   {
+    uuid: {
+      type: String,
+      required: true,
+    },
     content: {
       type: String,
       required: true,

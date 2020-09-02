@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { api } from "../../services/api";
 import { useProfile } from "../../contexts/profile";
 import { Container, Form } from "./styles";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import showAlert from "../../utils/showAlert";
 
 function SignUp() {
@@ -48,6 +48,8 @@ function SignUp() {
       console.error(error.response.data.message);
     }
   }
+
+  if (profile) return <Redirect to="/" />
 
   return (
     <Container>

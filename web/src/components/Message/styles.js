@@ -19,15 +19,53 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.div`
+  position: relative;
   margin-bottom: 4px;
+  
+  display: flex;
+  align-items: center;
+
+  grid-column-gap: 4px;
 
   > small {
     color: #888;
   }
 `;
+
 export const Content = styled.div`
   p {
     line-height: 1.4rem;
     word-wrap: break-word;
+  }
+`;
+
+export const MenuButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 1rem;
+  height: 1rem;
+
+  cursor: pointer;
+`;
+
+export const Menu = styled.ul`
+  position: absolute;
+  top: 1rem;
+  right: 0;
+
+  > li {
+    cursor: pointer;
+    list-style: none;
+    padding: 0.4rem;
+
+    border-radius: 7px;
+    border: 1px solid #eee;
+    background-color: #fff;
+
+    &:hover {
+      background-color: #eee;
+    }
   }
 `;

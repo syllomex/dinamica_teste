@@ -1,8 +1,8 @@
 const Messages = require("../../../models/Message");
 
-module.exports = async ({ content, user_id }) => {
+module.exports = async ({ uuid, content, user }) => {
   try {
-    const createdMessage = await Messages.create({ content, user: user_id });
+    const createdMessage = await Messages.create({ uuid, content, user });
 
     return createdMessage;
   } catch (error) {

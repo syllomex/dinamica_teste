@@ -7,6 +7,7 @@ import Chat from "./pages/Chat";
 import SignUp from "./pages/SignUp";
 import SignInAdm from "./pages/SignInAdm";
 import ChatAdmin from "./pages/ChatAdmin";
+import Logout from "./pages/Logout";
 
 function App() {
   const { profile, setProfile } = ProfileProvider();
@@ -19,12 +20,15 @@ function App() {
             {profile?.access_token ? (
               <React.Fragment>
                 <Route path="/" exact component={Chat} />
+                <Route path="/signup" exact component={SignUp} />
+                <Route path="/logout" exact component={Logout} />
                 <Route path="/admin" exact component={ChatAdmin} />
               </React.Fragment>
             ) : (
               <React.Fragment>
-                <Route path="/signup" exact component={SignUp} />
                 <Route path="/" exact component={SignIn} />
+                <Route path="/signup" exact component={SignUp} />
+                <Route path="/logout" exact component={Logout} />
                 <Route path="/admin" exact component={SignInAdm} />
               </React.Fragment>
             )}
