@@ -21,7 +21,7 @@ function Message({ data }) {
           <small> {moment(data.createdAt).format("HH:mm")}</small>
         </Header>
         <Content>
-          <p>{data.content}</p>
+          <p style={{whiteSpace: "pre-wrap"}}>{data.content}</p>
         </Content>
       </Container>
     </Wrapper>

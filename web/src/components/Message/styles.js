@@ -13,6 +13,8 @@ export const Container = styled.div`
   max-width: 500px;
   padding: 8px;
 
+  overflow-x: hidden;
+
   margin-bottom: 8px;
 `;
 
@@ -26,5 +28,6 @@ export const Header = styled.div`
 export const Content = styled.div`
   p {
     line-height: 1.4rem;
+    word-wrap: break-word;
   }
 `;

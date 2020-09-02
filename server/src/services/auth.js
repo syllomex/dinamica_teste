@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { comparePassword } = require("../services/password");
 
-async function signIn({ username, id, hash, password }) {
+async function signIn({ username, id, hash, password, admin }) {
   try {
     if (!username || !hash || !password || !id)
       throw new Error("Required value not provided on sign in");
@@ -9,7 +9,7 @@ async function signIn({ username, id, hash, password }) {
     const valid = await comparePassword(hash, password);
     if (!valid) throw new Error("Invalid password");
 
-    const token = jwt.sign({ username, id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ username, id, admin }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
 

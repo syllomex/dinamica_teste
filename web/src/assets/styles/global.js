@@ -7,6 +7,8 @@ export const GlobalStyles = createGlobalStyle`
     outline: 0;
     color: #555;
 
+    box-sizing: border-box;
+
     font-family: 'Roboto', sans-serif;
   }
 

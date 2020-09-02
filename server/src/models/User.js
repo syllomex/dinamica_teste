@@ -11,6 +11,10 @@ const userSchema = new mongo.Schema({
     required: true,
     select: false,
   },
+  admin: {
+    type: Boolean,
+    default: true
+  }
 });
 
 module.exports = mongo.model("users", userSchema);

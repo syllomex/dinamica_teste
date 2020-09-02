@@ -4,6 +4,9 @@ import SignIn from "./pages/SignIn";
 import { GlobalStyles } from "./assets/styles/global";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Chat from "./pages/Chat";
+import SignUp from "./pages/SignUp";
+import SignInAdm from "./pages/SignInAdm";
+import ChatAdmin from "./pages/ChatAdmin";
 
 function App() {
   const { profile, setProfile } = ProfileProvider();
@@ -14,9 +17,16 @@ function App() {
         <BrowserRouter>
           <Switch>
             {profile?.access_token ? (
-              <Route path="/" exact component={Chat} />
+              <React.Fragment>
+                <Route path="/" exact component={Chat} />
+                <Route path="/admin" exact component={ChatAdmin} />
+              </React.Fragment>
             ) : (
-              <Route path="/" exact component={SignIn} />
+              <React.Fragment>
+                <Route path="/signup" exact component={SignUp} />
+                <Route path="/" exact component={SignIn} />
+                <Route path="/admin" exact component={SignInAdm} />
+              </React.Fragment>
             )}
           </Switch>
         </BrowserRouter>

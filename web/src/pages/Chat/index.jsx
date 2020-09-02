@@ -12,9 +12,10 @@ import {
 } from "./styles";
 import Message from "../../components/Message";
 
+import { ReactComponent as SendIcon } from "../../assets/icons/paper-plane-regular.svg";
+
 function Chat() {
   const [socket, setSocket] = useState();
-  const [connected, setConnected] = useState(false);
 
   const [history, setHistory] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -32,7 +33,7 @@ function Chat() {
     });
 
     setSocket(socket);
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     if (!socket) return;
@@ -45,13 +46,12 @@ function Chat() {
         username: data.payload.username,
         user_id: data.payload.id,
       });
-      setConnected(true);
     });
 
     socket.on("chat.new_message", (data) => {
       setMessages((cur_messages) => [...cur_messages, data]);
     });
-  }, [socket]);
+  }, [socket]); // eslint-disable-line
 
   useLayoutEffect(() => {
     setTimeout(() => {
@@ -85,12 +85,13 @@ function Chat() {
     setTimeout(() => {
       messagesContainerRef.current.scrollTop =
         messagesContainerRef.current.scrollHeight + 100;
-    }, 100);
+    }, 200);
   }
 
   function logout() {
     localStorage.removeItem("access_token");
     setProfile(null);
+    window.location.href = "/";
   }
 
   return (
@@ -117,13 +118,17 @@ function Chat() {
               name="content"
               ref={contentRef}
             />
-            <button type="submit">Enviar</button>
+            <button type="submit">
+              <SendIcon />
+            </button>
           </form>
           <form>
             <FooterSpan>
               Conectado como <b>{profile?.username}</b> <br />{" "}
               <b>
-                <a onClick={logout}>Sair</a>
+                <a href="#!" onClick={logout}>
+                  Sair
+                </a>
               </b>
             </FooterSpan>
           </form>

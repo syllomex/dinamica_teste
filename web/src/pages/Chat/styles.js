@@ -10,6 +10,7 @@ export const Container = styled.div`
 export const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 
   background-color: rgba(245, 245, 245, 0.4);
   margin-top: 30px;
@@ -39,9 +40,9 @@ export const MessagesContainer = styled.div`
 `;
 
 export const ChatFooter = styled.div`
-  height: 8vh;
   width: 95%;
   align-self: center;
+  padding-bottom: 1rem;
 
   > form {
     display: flex;

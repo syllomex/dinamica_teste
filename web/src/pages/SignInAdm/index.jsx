@@ -5,7 +5,7 @@ import { Container, Form } from "./styles";
 import { Link } from "react-router-dom";
 import showAlert from "../../utils/showAlert";
 
-function SignIn() {
+function SignInAdm() {
   const { profile, setProfile } = useProfile();
 
   const alertRef = useRef();
@@ -26,7 +26,7 @@ function SignIn() {
     if (isEmpty) return showAlert(alertRef, "Preencha todos os campos.");
 
     try {
-      const response = await api.post("/signin", { ...data });
+      const response = await api.post("/signin-admin", { ...data });
 
       if (response.data?.access_token)
         setProfile({ ...profile, access_token: response.data.access_token });
@@ -37,6 +37,8 @@ function SignIn() {
         return showAlert(alertRef, "Nome de usuário não cadastrado.");
       if (errorMessage === "invalid password")
         return showAlert(alertRef, "Senha incorreta. Tente novamente.");
+      if (errorMessage === "not admin")
+        return showAlert(alertRef, "Essa conta não possui privilégios de administrador.");
     }
   }
 
@@ -44,9 +46,12 @@ function SignIn() {
     <Container>
       <Form onSubmit={handleSubmit}>
         <h1>
-          Bem-vindo ao <span>Chat!</span>
+          Área do <span>Administrador</span>
         </h1>
-        <span>Entre para começar a conversar!</span>
+        <span>
+          Por motivos de demonstração, todas as contas têm privilégios de
+          administrador.
+        </span>
         <span
           ref={alertRef}
           style={{ color: "rgb(220, 50, 20)", display: "none" }}
@@ -58,7 +63,7 @@ function SignIn() {
           cadastrar-se!
         </p>
         <p>
-          <Link to="/admin">Entrar como administrador</Link>
+          <Link to="/">Entrar como participante</Link>
         </p>
         <button type="submit">Entrar</button>
       </Form>
@@ -66,4 +71,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default SignInAdm;
