@@ -44,13 +44,21 @@ $ git clone https://github.com/syllomex/dinamica_teste.git
 ```sh
 # API
 $ cd server
-$ yarn install # ou npm install # Instalando as dependências
-$ yarn start # ou npm start # Inicializando a api
+
+# Instalando as dependências
+$ yarn install # ou npm install
+
+# Inicializando a api
+$ yarn start # ou npm start
 
 # Aplicação Web
 $ cd web
-$ yarn install # ou npm install # Instalando as dependências
-$ yarn start # ou npm start # Inicializando a aplicação web
+
+# Instalando as dependências
+$ yarn install # ou npm install
+
+# Inicializando a aplicação web
+$ yarn start # ou npm start
 ```
 
 **Atenção**: caso ocorra um erro na conexão com o banco de dados, tente alterar as credenciais da conexão em ```database.js```
