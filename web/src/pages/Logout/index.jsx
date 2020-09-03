@@ -12,7 +12,7 @@ function Logout() {
 
   if (!profile) return <Redirect to="/" />;
 
-  return <h1>hello world</h1>;
+  return <div />;
 }
 
 export default Logout;
