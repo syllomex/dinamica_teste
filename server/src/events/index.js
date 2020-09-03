@@ -12,7 +12,7 @@ module.exports = (io) => {
     const access_token = socket.handshake.query.access_token;
     const payload = await getTokenPayload(access_token);
 
-    const { id: user_id, username } = payload;
+    const { id: user_id, username, admin } = payload;
 
     let history = await GetHistory();
 
@@ -46,6 +46,8 @@ module.exports = (io) => {
     });
 
     socket.on("chat.delete_message", (uuid) => {
+      if (!admin) return;
+      
       socket.broadcast.emit("chat.delete_message", uuid);
 
       let deleting_index;
