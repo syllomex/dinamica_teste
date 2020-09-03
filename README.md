@@ -1,7 +1,7 @@
 <h1 align="center">Chat<br>
 <span align="center">Node.js | ReactJS | Socket.IO | MongoDB</span>
 </h1>
-<h3 align="center">Projeto desenvolvido para dinâmica da Formare Associados</h3>
+<h3 align="center">Projeto desenvolvido para dinâmica da Formare Tech</h3>
 <h1 align="center"><img src="https://img.shields.io/github/languages/top/syllomex/dinamica_teste?style=flat-square"></h1>
 
 # Objetivo
